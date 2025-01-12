@@ -1,0 +1,51 @@
+[font.normal]
+family = "hack"
+
+[window]
+opacity = 0.7
+
+[colors]
+
+  # Primary colors
+  [colors.primary]
+  background = '0x111111'
+  foreground = '0xe1e1e1'
+
+  # Cursor colors
+  [colors.cursor]
+  text = '0xaaaaaa'
+  cursor = '0xf8f8f2'
+
+  # Normal colors
+  [colors.normal]
+  black = '0x101010'
+  red = '0xf02525'
+  green = '0x25f025'
+  yellow = '0xf8f025'
+  blue = '0x2525f0'
+  magenta = '0xa020f0'
+  cyan = '0x00ffff'
+  white = '0xfdfdfd'
+
+  # Bright colors
+  [colors.bright]
+  black = '0x303030'
+  red = '0xf55555'
+  green = '0x55f555'
+  yellow = '0xfbf398'
+  blue = '0x5555f5'
+  magenta = '0xd353f3'
+  cyan = '0x33ffff'
+  white = '0xbfbfbf'
+
+  # Dim colors
+  [colors.dim]
+  black = '0x000000'
+  red = '0xa90000'
+  green = '0x049f2b'
+  yellow = '0xa3b106'
+  blue = '0x530aba'
+  magenta = '0xbb006b'
+  cyan = '0x433364'
+  white = '0x5f5f5f'
+
