@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Salir inmediatamente si ocurre un error
-set -e
+set -ex
 
 # Solicita el nombre de usuario y la contraseña durante la ejecución
 read -p "Introduce el nombre de usuario: " USERNAME
@@ -97,7 +97,7 @@ arch-chroot /mnt bash -c "
   cp /instalacion/rofi /home/$USERNAME/.config
   cp /instalacion/.zshrc /home/$USERNAME
   cp /instalacion/p10k.zsh /home/$USERNAME
-  cp /instalacion/fonts/* /usr/share/fonts
+  #cp /instalacion/fonts/* /usr/share/fonts
   chown -R $USERNAME:$USERNAME /home/$USERNAME
   chsh -s /bin/zsh $USERNAME
   ln -svf /home/$USERNAME/.config /root/.config
