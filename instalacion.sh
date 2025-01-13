@@ -50,7 +50,7 @@ echo "Instalando el sistema base..."
 pacstrap /mnt base base-devel linux-zen linux-firmware networkmanager
 
 # Mover configuraciones adicionales dentro del sistema
-mv ../instalacion /mnt
+cp -r instalacion /mnt
 
 # Genera el archivo fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -114,4 +114,4 @@ arch-chroot /mnt bash -c "
 
 # Finalización
 echo "¡Instalación base de Arch Linux completada! El equipo se reiniciará."
-shutdown now
+shutdown 0
