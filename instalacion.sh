@@ -50,7 +50,7 @@ echo "Instalando el sistema base..."
 pacstrap /mnt base base-devel linux-zen linux-firmware networkmanager
 
 # Mover configuraciones adicionales dentro del sistema
-cp -r instalacion /mnt
+cp -r instalador-arch /mnt
 
 # Genera el archivo fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -90,14 +90,14 @@ arch-chroot /mnt bash -c "
   echo '127.0.1.1   $HOSTNAME.localdomain $HOSTNAME' >> /etc/hosts
 
   # Configuración personalizada
-  cp /instalacion/alacritty /home/$USERNAME/.config
-  cp /instalacion/nvim /home/$USERNAME/.config
-  cp /instalacion/qtile /home/$USERNAME/.config
-  cp /instalacion/ranger /home/$USERNAME/.config
-  cp /instalacion/rofi /home/$USERNAME/.config
-  cp /instalacion/.zshrc /home/$USERNAME
-  cp /instalacion/p10k.zsh /home/$USERNAME
-  #cp /instalacion/fonts/* /usr/share/fonts
+  cp /instalador-arch/alacritty /home/$USERNAME/.config
+  cp /instalador-arch/nvim /home/$USERNAME/.config
+  cp /instalador-arch/qtile /home/$USERNAME/.config
+  cp /instalador-arch/ranger /home/$USERNAME/.config
+  cp /instalador-arch/rofi /home/$USERNAME/.config
+  cp /instalador-arch/.zshrc /home/$USERNAME
+  cp /instalador-arch/p10k.zsh /home/$USERNAME
+  #cp /instalador-arch/fonts/* /usr/share/fonts
   chown -R $USERNAME:$USERNAME /home/$USERNAME
   chsh -s /bin/zsh $USERNAME
   ln -svf /home/$USERNAME/.config /root/.config
