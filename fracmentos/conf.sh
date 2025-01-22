@@ -9,8 +9,20 @@ useradd -m -G wheel $USERNAME  # Crea un usuario con privilegios de sudo
 echo $USERNAME:$PASSWORD | chpasswd  # Establece la contraseña del nuevo usuario
 echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel  # Habilita sudo para el grupo wheel
 # Instalación de paquetes con pacman
-pacman -S --noconfirm blender thunderbird bitwarden git sudo grub efibootmgr virtualbox tor firefox libreoffice alacritty ranger lsd bat zathura vlc feh unzip rofi fastfetch gnome qtile picom zsh
-# Instalación de yay
+pacman -S --noconfirm git sudo grub efibootmgr firefox alacritty ranger lsd bat zathura vlc feh unzip rofi fastfetch gnome qtile picom zsh
+## Configuración personalizada
+cp /instalador-arch/alacritty /home/$USERNAME/.config
+cp /instalador-arch/nvim /home/$USERNAME/.config
+cp /instalador-arch/qtile /home/$USERNAME/.config
+cp /instalador-arch/ranger /home/$USERNAME/.config
+cp /instalador-arch/rofi /home/$USERNAME/.config
+cp /instalador-arch/.zshrc /home/$USERNAME
+cp /instalador-arch/p10k.zsh /home/$USERNAME
+chown -R $USERNAME:$USERNAME /home/$USERNAME
+chsh -s /bin/zsh $USERNAME
+ln -svf /home/$USERNAME/.config /root/.config
+
+#Instalación de yay
 cd /home/$USERNAME
 git clone https://aur.archlinux.org/yay.git
 cd yay
@@ -30,18 +42,6 @@ echo '$HOSTNAME' > /etc/hostname
 echo '127.0.0.1   localhost' > /etc/hosts
 echo '::1         localhost' >> /etc/hosts
 echo '127.0.1.1   $HOSTNAME.localdomain $HOSTNAME' >> /etc/hosts
-# Configuración personalizada
-cp /instalador-arch/alacritty /home/$USERNAME/.config
-cp /instalador-arch/nvim /home/$USERNAME/.config
-cp /instalador-arch/qtile /home/$USERNAME/.config
-cp /instalador-arch/ranger /home/$USERNAME/.config
-cp /instalador-arch/rofi /home/$USERNAME/.config
-cp /instalador-arch/.zshrc /home/$USERNAME
-cp /instalador-arch/p10k.zsh /home/$USERNAME
-#cp /instalador-arch/fonts/* /usr/share/fonts
-chown -R $USERNAME:$USERNAME /home/$USERNAME
-chsh -s /bin/zsh $USERNAME
-ln -svf /home/$USERNAME/.config /root/.config
 
 # Habilitación de servicios
 systemctl enable gdm

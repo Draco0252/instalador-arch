@@ -57,4 +57,4 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 # Configuración del sistema
 echo "Configurando el sistema..."
-arch-chroot /mnt bash -c "
+arch-chroot /mnt
