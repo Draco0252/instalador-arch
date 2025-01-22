@@ -53,13 +53,14 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 # Configuración del sistema
 echo "Configurando el sistema..."
-arch-chroot /mnt bash -c "
+arch-chroot /mnt <<EOF
   echo root:${PASSWORD} | chpasswd
   useradd -m -G wheel ${USERNAME}
   echo ${USERNAME}:${PASSWORD} | chpasswd
   echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
 
-  pacman -S --noconfirm blender thunderbird bitwarden git sudo grub efibootmgr virtualbox tor firefox libreoffice alacritty ranger lsd bat zathura vlc feh unzip rofi fastfetch gnome qtile picom zsh
+  #pacman -S --noconfirm blender thunderbird bitwarden virtualbox tor libreoffice 
+  pacman -S --noconfirm git sudo grub efibootmgr firefox alacritty ranger lsd bat zathura vlc feh unzip rofi fastfetch gnome qtile picom zsh
 
   cd /home/${USERNAME}
   git clone https://aur.archlinux.org/yay.git
@@ -71,12 +72,12 @@ arch-chroot /mnt bash -c "
   hwclock --systohc
   echo '${LOCALE} UTF-8' > /etc/locale.gen
   locale-gen
-  echo 'LANG=${LOCALE}' > /etc/locale.conf
-  echo 'KEYMAP=${KEYMAP}' > /etc/vconsole.conf
-  echo '${HOSTNAME}' > /etc/hostname
+  echo "LANG=${LOCALE}" > /etc/locale.conf
+  echo "KEYMAP=${KEYMAP}" > /etc/vconsole.conf
+  echo "${HOSTNAME}" > /etc/hostname
   echo '127.0.0.1   localhost' > /etc/hosts
   echo '::1         localhost' >> /etc/hosts
-  echo '127.0.1.1   ${HOSTNAME}.localdomain ${HOSTNAME}' >> /etc/hosts
+  echo "127.0.1.1   ${HOSTNAME}.localdomain ${HOSTNAME}" >> /etc/hosts
 
   cp -r alacritty /home/${USERNAME}/.config
   cp -r nvim /home/${USERNAME}/.config
@@ -94,8 +95,9 @@ arch-chroot /mnt bash -c "
 
   grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
   grub-mkconfig -o /boot/grub/grub.cfg
-"
+EOF
 
 # Finalización
 echo "¡Instalación base de Arch Linux completada! El equipo se reiniciará."
 shutdown 0
+
