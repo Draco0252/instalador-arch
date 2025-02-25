@@ -41,8 +41,8 @@ mkfs.ext4 "$ROOT_PART"
 echo "Montando particiones..."
 mount "$ROOT_PART" /mnt
 swapon "$SWAP_PART"
-mkdir /mnt/boot
-mount "$EFI_PART" /mnt/boot
+mkdir /mnt/boot/efi
+mount "$EFI_PART" /mnt/boot/efi
 
 # Instalación del sistema base
 echo "Instalando el sistema base..."
@@ -53,21 +53,23 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 # Configuración del sistema
 echo "Configurando el sistema..."
-arch-chroot /mnt <<EOF
+#arch-chroot /mnt <<EOF
   echo root:${PASSWORD} | chpasswd
   useradd -m -G wheel ${USERNAME}
   echo ${USERNAME}:${PASSWORD} | chpasswd
   echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
 
-  #pacman -S --noconfirm blender thunderbird bitwarden virtualbox tor libreoffice 
-  pacman -S --noconfirm git sudo grub efibootmgr firefox alacritty ranger lsd bat zathura vlc feh unzip rofi fastfetch gnome qtile picom zsh
+  pacman -S --noconfirm blender thunderbird bitwarden virtualbox tor libreoffice git sudo grub efibootmgr firefox alacritty ranger lsd bat zathura vlc feh unzip rofi fastfetch gnome qtile picom zsh zsh-syntax-highlighting zsh-autosuggestions xclip discord
 
   cd /home/${USERNAME}
   git clone https://aur.archlinux.org/yay.git
   cd yay
   makepkg -si --noconfirm
-  yay -S --noconfirm brave-bin wasistlos-appimage
-
+  yay -S --noconfirm brave-bin wasistlos-appimage skalauncher
+  
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
+  echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
+  
   ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
   hwclock --systohc
   echo '${LOCALE} UTF-8' > /etc/locale.gen
@@ -79,13 +81,6 @@ arch-chroot /mnt <<EOF
   echo '::1         localhost' >> /etc/hosts
   echo "127.0.1.1   ${HOSTNAME}.localdomain ${HOSTNAME}" >> /etc/hosts
 
-  cp -r alacritty /home/${USERNAME}/.config
-  cp -r nvim /home/${USERNAME}/.config
-  cp -r qtile /home/${USERNAME}/.config
-  cp -r ranger /home/${USERNAME}/.config
-  cp -r rofi /home/${USERNAME}/.config
-  cp .zshrc /home/${USERNAME}
-  cp p10k.zsh /home/${USERNAME}
   chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}
   chsh -s /bin/zsh ${USERNAME}
   ln -svf /home/${USERNAME}/.config /root/.config
@@ -93,10 +88,18 @@ arch-chroot /mnt <<EOF
   systemctl enable gdm
   systemctl enable NetworkManager
 
-  grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+  grub-install
   grub-mkconfig -o /boot/grub/grub.cfg
 EOF
 
+cp -r alacritty /mnt/home/${USERNAME}/.config
+cp -r nvim /mnt/home/${USERNAME}/.config
+cp -r qtile /mnt/home/${USERNAME}/.config
+cp -r ranger /mnt/home/${USERNAME}/.config
+cp -r rofi /mnt/home/${USERNAME}/.config
+cp .zshrc /mnt/home/${USERNAME}
+cp p10k.zsh /mnt/home/${USERNAME}
+cp -r zsh /mnt/usr/share
 # Finalización
 echo "¡Instalación base de Arch Linux completada! El equipo se reiniciará."
 shutdown 0
